@@ -1,10 +1,10 @@
 import random
 
 
-def chose_random_number():
+def choose_random_number():
     """
-    The function generates number between 1 and 10(includes) and give user five chans to guess this number
-    Also add to every fail attempt a little tip: is this to high or to low
+    The function generates number between 1 and 10(includes) and gives user five chans to guess this number
+    Also add to every failed attempt a little tip: is this to high or to low
     """
     random_number = random.randint(1, 10)
     for attempt in range(5):
@@ -18,5 +18,5 @@ def chose_random_number():
     return f"You have used all your attempts. Correct number was {random_number} :("
 
 
-start = chose_random_number()
+start = choose_random_number()
 print(start)
