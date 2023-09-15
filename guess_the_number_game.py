@@ -8,7 +8,13 @@ def choose_random_number():
     """
     random_number = random.randint(1, 10)
     for attempt in range(5):
-        user_number = int(input('Guess a number between 1 and 10 includes: '))
+        while True:
+            user_number = int(input('Guess a number between 1 and 10 (inclusive): '))
+            if 1 <= user_number <= 10:
+                break
+            else:
+                continue
+
         if user_number == random_number:
             return f"Congratulations, you guessed right :)"
         elif user_number < random_number:
@@ -18,5 +24,8 @@ def choose_random_number():
     return f"You have used all your attempts. Correct number was {random_number} :("
 
 
+
 start = choose_random_number()
 print(start)
+
+
