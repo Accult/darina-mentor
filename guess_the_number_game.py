@@ -28,8 +28,7 @@ def choose_random_number():
             print("It's too low. Try again!")
         elif user_number > random_number:
             print("It's too high. Try again!")
-        else:
-            return f"You have used all your attempts. Correct number was {random_number} :("
+        return f"You have used all your attempts. Correct number was {random_number} :("
 
 
 number_game = choose_random_number()
