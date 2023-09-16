@@ -10,7 +10,7 @@ def get_user_option():
     If not, it laughs at what a sucker the user is and asks to choose again.
     """
     while True:
-        user_option = input('Choose some option (scissor, paper or rock): ').lower()
+        user_option = input('Choose some option (scissors, paper or rock): ').lower()
         if user_option in options:
             return user_option
         else:
