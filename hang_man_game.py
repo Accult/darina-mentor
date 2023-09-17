@@ -6,6 +6,10 @@ word = random.choice(words_list)
 
 
 def get_word_of_game():
+    """
+    This function chooses word of list by random.
+    Also create two lists with this spelled out word for the following use.
+    """
     spelled_word = []
     hidden_spelled_word = []
     for letter in word:
@@ -16,6 +20,9 @@ def get_word_of_game():
 
 
 def get_users_letter():
+    """
+    This function get users letter and check is this letter or number.
+    """
     while True:
         users_letter = input('Enter any letter: ').lower()
         if len(users_letter) == 1 and users_letter.isalpha():
@@ -25,6 +32,11 @@ def get_users_letter():
 
 
 def get_result():
+    """
+    In case if user used all chance input the letter this function will
+    announce whether the user has won or not, giving them one last chance to guess the word
+
+    """
     last_chans = input('What do you think this word is: ').lower()
 
     while True:
@@ -40,6 +52,9 @@ def get_result():
 
 
 def set_terms_of_game():
+    """
+    In this function there are all rules of game
+    """
     spelled_word, hidden_spelled_word = get_word_of_game()
 
     for attempt in range(number_of_attempts):
