@@ -1,17 +1,17 @@
 import random
 
-Options = ['scissors', 'paper', 'rock']
+OPTIONS = ['scissors', 'paper', 'rock']
 
 
 def get_user_option():
     """
-    this function asks the user to choose a scissor, paper or stone.
+    this function asks the user to choose scissors, paper or stone.
     If the user entered everything correctly, the choice is saved.
     If not, it laughs at what a sucker the user is and asks to choose again.
     """
     while True:
         user_option = input('Choose some option (scissors, paper or rock): ').lower()
-        if user_option in Options:
+        if user_option in OPTIONS:
             return user_option
         else:
             print("You can't spell words right, loser")
@@ -21,7 +21,7 @@ def get_random_option():
     """
     This function makes the choice for the computer
     """
-    random_option = random.choice(Options)
+    random_option = random.choice(OPTIONS)
     return random_option
 
 
