@@ -1,8 +1,8 @@
 import random
 
-number_of_attempts = 6
-words_list = ['apple', 'computer', 'dog', 'banana', 'egg', 'independent', 'developer', 'wedding']
-word = random.choice(words_list)
+Number_of_attempts = 6
+Words_list = ['apple', 'computer', 'dog', 'banana', 'egg', 'independent', 'developer', 'wedding']
+Word = random.choice(Words_list)
 
 
 def get_word_of_game():
@@ -12,7 +12,7 @@ def get_word_of_game():
     """
     spelled_word = []
     hidden_spelled_word = []
-    for letter in word:
+    for letter in Word:
         spelled_word.append(letter)
         hidden_spelled_word.append('_')
     print("".join(hidden_spelled_word))
@@ -44,10 +44,10 @@ def get_result():
             break
         else:
             print("Don't use numbers. Only one word! ")
-    if last_chans == word:
+    if last_chans == Word:
         return 'You are winner!'
     else:
-        return f"You lost. Right word: {word}"
+        return f"You lost. Right word: {Word}"
 
 
 def set_terms_of_game():
@@ -56,9 +56,9 @@ def set_terms_of_game():
     """
     spelled_word, hidden_spelled_word = get_word_of_game()
 
-    for attempt in range(number_of_attempts):
+    for attempt in range(Number_of_attempts):
         if '_' not in hidden_spelled_word:
-            return f"You are winner. It really was word: {word}"
+            return f"You are winner. It really was word: {Word}"
         users_letter = get_users_letter()
         for index, letter in enumerate(spelled_word):
             if letter == users_letter:
