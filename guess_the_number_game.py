@@ -1,35 +1,42 @@
 import random
 
-Minimum_range = 1
-Maximum_range = 10
+MINIMUM_RANGE = 1
+MAXIMUM_RANGE = 10
+ATTEMPTS = 5
+RANDOM_NUMBER = random.randint(MINIMUM_RANGE, MAXIMUM_RANGE)
 
 
-def choose_random_number():
+def get_users_number():
     """
-    The function generates number between 1 and 10(includes) and gives user five chans to guess this number
-    Also add to every failed attempt a little tip: is this to high or to low
+    This function get users number.
     """
-    random_number = random.randint(Minimum_range, Maximum_range)
-    for attempt in range(5):
-        while True:
-            user_choice = input('Guess a number between 1 and 10 (inclusive): ')
-            try:
-                user_number = int(user_choice)
-                if Minimum_range <= user_number <= Maximum_range:
-                    break
-                else:
-                    print('Your number is out of range. Try to select different number.')
-            except ValueError:
-                print("Invalid input. Please enter a valid number.")
+    while True:
+        users_input = input('Guess a number between 1 and 10 (inclusive): ')
+        try:
+            users_number = int(users_input)
+            if MINIMUM_RANGE <= users_number <= MAXIMUM_RANGE:
+                return users_number
+            else:
+                print('Your number is out of range. Try to select different number.')
+        except ValueError:
+            print("Invalid input. Please enter a valid number.")
 
-        if user_number == random_number:
+
+def set_game_conditions():
+    """
+    This function checks the selected user number for game conditions.
+    """
+    for attempt in range(ATTEMPTS):
+        users_number = get_users_number()
+        if users_number == RANDOM_NUMBER:
             return f"Congratulations, you guessed right :)"
-        elif user_number < random_number:
+        elif users_number < RANDOM_NUMBER:
             print("It's too low. Try again!")
         else:
             print("It's too high. Try again!")
-    return f"You have used all your attempts. Correct number was {random_number} :("
+
+    return f"You have used all your attempts. Correct number was {RANDOM_NUMBER} :("
 
 
-number_game = choose_random_number()
+number_game = set_game_conditions()
 print(number_game)
