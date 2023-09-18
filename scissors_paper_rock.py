@@ -1,6 +1,6 @@
 import random
 
-options = ['scissors', 'paper', 'rock']
+Options = ['scissors', 'paper', 'rock']
 
 
 def get_user_option():
@@ -11,7 +11,7 @@ def get_user_option():
     """
     while True:
         user_option = input('Choose some option (scissors, paper or rock): ').lower()
-        if user_option in options:
+        if user_option in Options:
             return user_option
         else:
             print("You can't spell words right, loser")
@@ -21,7 +21,7 @@ def get_random_option():
     """
     This function makes the choice for the computer
     """
-    random_option = random.choice(options)
+    random_option = random.choice(Options)
     return random_option
 
 
