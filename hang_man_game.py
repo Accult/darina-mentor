@@ -1,7 +1,7 @@
 import random
 
 number_of_attempts = 6
-words_list = ['apple', 'computer', 'dog', 'banana', 'egg', 'independent', 'developer', 'weeding']
+words_list = ['apple', 'computer', 'dog', 'banana', 'egg', 'independent', 'developer', 'wedding']
 word = random.choice(words_list)
 
 
@@ -37,14 +37,13 @@ def get_result():
     announce whether the user has won or not, giving them one last chance to guess the word
 
     """
-    last_chans = input('What do you think this word is: ').lower()
 
     while True:
+        last_chans = input('What do you think this word is: ').lower()
         if last_chans.isalpha():
             break
         else:
             print("Don't use numbers. Only one word! ")
-            last_chans = input('What do you think this word is: ').lower()
     if last_chans == word:
         return 'You are winner!'
     else:
