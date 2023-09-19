@@ -165,7 +165,8 @@ class HangManGame(Game):
         """
         definition = self.get_hint_from_api()
         while True:
-            print("You have used all your attempts. Last chance, enter the correct word. You can also get a hint by simply writing: 'hint'. ")
+            print(
+                "You have used all your attempts. Last chance, enter the correct word. You can also get a hint by simply writing: 'hint'. ")
             last_chans = input().lower()
 
             if last_chans.isalpha():
