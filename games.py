@@ -1,4 +1,5 @@
 import random
+import requests
 
 
 class Game:
@@ -110,6 +111,27 @@ class HangManGame(Game):
         self.NUMBER_OF_ATTEMPTS = 6
         self.WORD_LIST = ['apple', 'computer', 'dog', 'banana', 'egg', 'independent', 'developer', 'wedding']
         self.WORD = random.choice(self.WORD_LIST)
+        self.API_URL = f"https://api.dictionaryapi.dev/api/v2/entries/en/{self.WORD}"
+        self.HINTS_USED = 0
+
+    def get_hint_from_api(self):
+        """
+        Request for api
+        By this function we get definition(hints) for our word
+        """
+        response = requests.get(self.API_URL)
+        if response.status_code == 200:
+            data = response.json()
+        entry = data[0] if data else None
+
+        if entry:
+            meanings = entry.get('meanings', [])
+            if meanings:
+                definitions = meanings[0].get('definitions', [])
+                if definitions:
+                    definition = definitions[0].get('definition', 'No hints')
+                    return definition
+        return 'No hints for word! '
 
     def get_word_of_game(self):
         """
@@ -138,17 +160,27 @@ class HangManGame(Game):
     def get_result(self):
         """
         In case if user used all chance input the letter this function will
-        announce whether the user has won or not, giving them one last chance to guess the word
+        announce whether the user has won or not, giving them one last chance to guess the word or use hints
 
         """
-
+        definition = self.get_hint_from_api()
         while True:
-            last_chans = input('What do you think this word is: ').lower()
+            print("You have used all your attempts. Last chance, enter the correct word. You can also get a hint by simply writing: 'hint'. ")
+            last_chans = input().lower()
+
             if last_chans.isalpha():
                 break
             else:
                 print("Don't use numbers. Only one word! ")
-        if last_chans == self.WORD:
+        if last_chans == 'hint' and self.HINTS_USED < 1:
+            self.HINTS_USED = 1
+            print(definition)
+            return self.get_result()
+        if last_chans == 'hint' and self.HINTS_USED == 1:
+            print('You have used hint already')
+            return self.get_result()
+
+        elif last_chans == self.WORD:
             return 'You are winner!'
         else:
             return f"You lost. Right word: {self.WORD}"
