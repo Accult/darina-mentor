@@ -18,6 +18,9 @@ class NumberGuessingGame(Game):
         self.hints_used = 0
 
     def get_hint(self):
+        """
+        This function get hint from API.
+        """
         response = requests.get(self.API_URL)
         if response.status_code == 200:
             hint = response.text
@@ -64,6 +67,21 @@ class ScissorsPaperRockGame(Game):
     def __init__(self):
         super().__init__()
         self.OPTIONS = ['scissors', 'paper', 'rock']
+        self.API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en/{}"
+
+    def get_hint(self):
+        for word in self.OPTIONS:
+            api_url_for_word = self.API_URL.format(word)
+            response = requests.get(api_url_for_word)
+            if response.status_code == 200:
+                data = response.json()
+                entry = data[0] if data else None
+                if entry:
+                    word = entry.get('word', 'No such word')
+                    phonetic = entry.get('phonetic', 'No phonetic')
+                    print(f"Word: {word}, Phonetic: {phonetic}")
+            else:
+                print(f"Failed to get data for word: {word}")
 
     def get_user_option(self):
         """
@@ -73,7 +91,9 @@ class ScissorsPaperRockGame(Game):
         """
         while True:
             user_option = input('Choose some option (scissors, paper or rock): ').lower()
-            if user_option in self.OPTIONS:
+            if user_option == 'hint':
+                print(self.get_hint())
+            elif user_option in self.OPTIONS:
                 return user_option
             else:
                 print("You can't spell words right, loser")
@@ -105,18 +125,13 @@ class ScissorsPaperRockGame(Game):
             return "You lost! Computers took over the world."
 
     def play_game(self):
-        while True:
-            user_option = self.get_user_option()
-            random_option = self.get_random_option()
+        user_option = self.get_user_option()
+        random_option = self.get_random_option()
 
-            print(f"You chose {user_option}. Computer chose {random_option}.")
+        print(f"You chose {user_option}. Computer chose {random_option}.")
 
-            winner = self.get_winner(user_option, random_option)
-            print(winner)
-
-            play_again = input("Play again? (yes/no): ").lower()
-            if play_again != "yes":
-                break
+        winner = self.get_winner(user_option, random_option)
+        print(winner)
 
 
 class HangManGame(Game):
@@ -166,7 +181,12 @@ class HangManGame(Game):
         """
         while True:
             users_letter = input('Enter any letter: ').lower()
-            if len(users_letter) == 1 and users_letter.isalpha():
+            if users_letter == 'hint' and self.HINTS_USED == 0:
+                self.HINTS_USED = 1
+                print(self.get_hint_from_api())
+            if users_letter == 'hint' and self.HINTS_USED == 1:
+                print('You have used hint already')
+            elif len(users_letter) == 1 and users_letter.isalpha():
                 return users_letter
             else:
                 print("You're an idiot! I told you to write one letter. ")
@@ -177,7 +197,6 @@ class HangManGame(Game):
         announce whether the user has won or not, giving them one last chance to guess the word or use hints
 
         """
-        definition = self.get_hint_from_api()
         while True:
             print(
                 "You have used all your attempts. Last chance, enter the correct word. You can also get a hint by simply writing: 'hint'. ")
@@ -187,15 +206,7 @@ class HangManGame(Game):
                 break
             else:
                 print("Don't use numbers. Only one word! ")
-        if last_chans == 'hint' and self.HINTS_USED < 1:
-            self.HINTS_USED = 1
-            print(definition)
-            return self.get_result()
-        if last_chans == 'hint' and self.HINTS_USED == 1:
-            print('You have used hint already')
-            return self.get_result()
-
-        elif last_chans == self.WORD:
+        if last_chans == self.WORD:
             return 'You are winner!'
         else:
             return f"You lost. Right word: {self.WORD}"
@@ -224,6 +235,7 @@ class HangManGame(Game):
 if __name__ == "__main__":
     while True:
         print()
+        print("In any game you can use some hint just by writing 'hint' !")
         print("Choose a game:")
         print("1. Number Guessing Game")
         print("2. Rock-Paper-Scissors Game")
