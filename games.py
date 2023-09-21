@@ -14,21 +14,35 @@ class NumberGuessingGame(Game):
         self.MAXIMUM_RANGE = 10
         self.ATTEMPTS = 5
         self.RANDOM_NUMBER = random.randint(self.MINIMUM_RANGE, self.MAXIMUM_RANGE)
+        self.API_URL = f"http://numbersapi.com/{self.RANDOM_NUMBER}/trivia?fragment"
+        self.hints_used = 0
+
+    def get_hint(self):
+        response = requests.get(self.API_URL)
+        if response.status_code == 200:
+            hint = response.text
+        return hint if hint else "There is none hints for this number"
 
     def get_users_number(self):
         """
-        This function get users number.
+        This function gets the user's number.
         """
         while True:
             users_input = input('Guess a number between 1 and 10 (inclusive): ')
-            try:
-                users_number = int(users_input)
-                if self.MINIMUM_RANGE <= users_number <= self.MAXIMUM_RANGE:
-                    return users_number
-                else:
-                    print('Your number is out of range. Try to select different number.')
-            except ValueError:
-                print("Invalid input. Please enter a valid number.")
+            if users_input == 'hint' and self.hints_used == 0:
+                self.hints_used = 1
+                print(self.get_hint())
+            elif users_input == 'hint' and self.hints_used == 1:
+                print('You have used hint already')
+            else:
+                try:
+                    users_number = int(users_input)
+                    if self.MINIMUM_RANGE <= users_number <= self.MAXIMUM_RANGE:
+                        return users_number
+                    else:
+                        print('Your number is out of range. Try to select a different number.')
+                except ValueError:
+                    print("Invalid input. Please enter a valid number.")
 
     def play_game(self):
         """
