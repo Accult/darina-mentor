@@ -3,8 +3,10 @@ import requests
 
 
 class Game:
-    def __init__(self):
-        pass
+    pass
+
+
+
 
 
 class NumberGuessingGame(Game):
@@ -32,7 +34,7 @@ class NumberGuessingGame(Game):
             users_input = input('Guess a number between 1 and 10 (inclusive): ')
             if users_input == 'hint' and NumberGuessingGame.hints_used == 0:
                 NumberGuessingGame.hints_used = 1
-                print(NumberGuessingGame.get_hint())
+                print(self.get_hint())
             elif users_input == 'hint' and NumberGuessingGame.hints_used == 1:
                 print('You have used hint already')
             else:
@@ -50,7 +52,7 @@ class NumberGuessingGame(Game):
         This function checks the selected user number for game conditions.
         """
         for attempt in range(NumberGuessingGame.ATTEMPTS):
-            users_number = NumberGuessingGame.get_users_number()
+            users_number = self.get_users_number()
             if users_number == NumberGuessingGame.random_number:
                 return f"Congratulations, you guessed right :)"
             elif users_number < NumberGuessingGame.random_number:
@@ -64,7 +66,6 @@ class NumberGuessingGame(Game):
 class ScissorsPaperRockGame(Game):
     options = ['scissors', 'paper', 'rock']
     API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en/{}"
-
 
     def get_hint(self):
         for word in ScissorsPaperRockGame.options:
@@ -80,7 +81,6 @@ class ScissorsPaperRockGame(Game):
             else:
                 print(f"Failed to get data for word: {word}")
 
-
     def get_user_option(self):
         """
         this function asks the user to choose scissors, paper or stone.
@@ -90,7 +90,7 @@ class ScissorsPaperRockGame(Game):
         while True:
             user_option = input('Choose some option (scissors, paper or rock): ').lower()
             if user_option == 'hint':
-                print(ScissorsPaperRockGame.get_hint())
+                print(self.get_hint())
             elif user_option in ScissorsPaperRockGame.options:
                 return user_option
             else:
@@ -123,12 +123,12 @@ class ScissorsPaperRockGame(Game):
             return "You lost! Computers took over the world."
 
     def play_game(self):
-        user_option = ScissorsPaperRockGame.get_user_option()
-        random_option = ScissorsPaperRockGame.get_random_option()
+        user_option = self.get_user_option()
+        random_option = self.get_random_option()
 
         print(f"You chose {user_option}. Computer chose {random_option}.")
 
-        winner = ScissorsPaperRockGame.get_winner(user_option, random_option)
+        winner = self.get_winner(user_option, random_option)
         print(winner)
 
 
@@ -211,12 +211,12 @@ class HangManGame(Game):
         """
         In this function there are all rules of game
         """
-        spelled_word, hidden_spelled_word = HangManGame.get_word_of_game()
+        spelled_word, hidden_spelled_word = self.get_word_of_game()
 
         for attempt in range(HangManGame.NUMBER_OF_ATTEMPTS):
             if '_' not in hidden_spelled_word:
                 return f"You are winner. It really was word: {HangManGame.word}"
-            users_letter = HangManGame.get_users_letter()
+            users_letter = self.get_users_letter()
             for index, letter in enumerate(spelled_word):
                 if letter == users_letter:
                     hidden_spelled_word[index] = spelled_word[index]
@@ -225,7 +225,7 @@ class HangManGame(Game):
             print("".join(hidden_spelled_word))
 
         if '_' in hidden_spelled_word:
-            return HangManGame.get_result()
+            return self.get_result()
 
 
 if __name__ == "__main__":
