@@ -8,20 +8,18 @@ class Game:
 
 
 class NumberGuessingGame(Game):
-    def __init__(self):
-        super().__init__()
-        self.MINIMUM_RANGE = 1
-        self.MAXIMUM_RANGE = 10
-        self.ATTEMPTS = 5
-        self.RANDOM_NUMBER = random.randint(self.MINIMUM_RANGE, self.MAXIMUM_RANGE)
-        self.API_URL = f"http://numbersapi.com/{self.RANDOM_NUMBER}/trivia?fragment"
-        self.hints_used = 0
+    MINIMUM_RANGE = 1
+    MAXIMUM_RANGE = 10
+    ATTEMPTS = 5
+    random_number = random.randint(MINIMUM_RANGE, MAXIMUM_RANGE)
+    API_URL = f"http://numbersapi.com/{random_number}/trivia?fragment"
+    hints_used = 0
 
     def get_hint(self):
         """
         This function get hint from API.
         """
-        response = requests.get(self.API_URL)
+        response = requests.get(NumberGuessingGame.API_URL)
         if response.status_code == 200:
             hint = response.text
         return hint if hint else "There is none hints for this number"
@@ -32,15 +30,15 @@ class NumberGuessingGame(Game):
         """
         while True:
             users_input = input('Guess a number between 1 and 10 (inclusive): ')
-            if users_input == 'hint' and self.hints_used == 0:
-                self.hints_used = 1
-                print(self.get_hint())
-            elif users_input == 'hint' and self.hints_used == 1:
+            if users_input == 'hint' and NumberGuessingGame.hints_used == 0:
+                NumberGuessingGame.hints_used = 1
+                print(NumberGuessingGame.get_hint())
+            elif users_input == 'hint' and NumberGuessingGame.hints_used == 1:
                 print('You have used hint already')
             else:
                 try:
                     users_number = int(users_input)
-                    if self.MINIMUM_RANGE <= users_number <= self.MAXIMUM_RANGE:
+                    if NumberGuessingGame.MINIMUM_RANGE <= users_number <= NumberGuessingGame.MAXIMUM_RANGE:
                         return users_number
                     else:
                         print('Your number is out of range. Try to select a different number.')
@@ -51,27 +49,26 @@ class NumberGuessingGame(Game):
         """
         This function checks the selected user number for game conditions.
         """
-        for attempt in range(self.ATTEMPTS):
-            users_number = self.get_users_number()
-            if users_number == self.RANDOM_NUMBER:
+        for attempt in range(NumberGuessingGame.ATTEMPTS):
+            users_number = NumberGuessingGame.get_users_number()
+            if users_number == NumberGuessingGame.random_number:
                 return f"Congratulations, you guessed right :)"
-            elif users_number < self.RANDOM_NUMBER:
+            elif users_number < NumberGuessingGame.random_number:
                 print("It's too low. Try again!")
             else:
                 print("It's too high. Try again!")
 
-        return f"You have used all your attempts. Correct number was {self.RANDOM_NUMBER} :("
+        return f"You have used all your attempts. Correct number was {NumberGuessingGame.random_number} :("
 
 
 class ScissorsPaperRockGame(Game):
-    def __init__(self):
-        super().__init__()
-        self.OPTIONS = ['scissors', 'paper', 'rock']
-        self.API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en/{}"
+    options = ['scissors', 'paper', 'rock']
+    API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en/{}"
+
 
     def get_hint(self):
-        for word in self.OPTIONS:
-            api_url_for_word = self.API_URL.format(word)
+        for word in ScissorsPaperRockGame.options:
+            api_url_for_word = ScissorsPaperRockGame.API_URL.format(word)
             response = requests.get(api_url_for_word)
             if response.status_code == 200:
                 data = response.json()
@@ -83,6 +80,7 @@ class ScissorsPaperRockGame(Game):
             else:
                 print(f"Failed to get data for word: {word}")
 
+
     def get_user_option(self):
         """
         this function asks the user to choose scissors, paper or stone.
@@ -92,8 +90,8 @@ class ScissorsPaperRockGame(Game):
         while True:
             user_option = input('Choose some option (scissors, paper or rock): ').lower()
             if user_option == 'hint':
-                print(self.get_hint())
-            elif user_option in self.OPTIONS:
+                print(ScissorsPaperRockGame.get_hint())
+            elif user_option in ScissorsPaperRockGame.options:
                 return user_option
             else:
                 print("You can't spell words right, loser")
@@ -102,7 +100,7 @@ class ScissorsPaperRockGame(Game):
         """
         This function makes the choice for the computer
         """
-        random_option = random.choice(self.OPTIONS)
+        random_option = random.choice(ScissorsPaperRockGame.options)
         return random_option
 
     def get_winner(self, user_option, random_option):
@@ -125,30 +123,28 @@ class ScissorsPaperRockGame(Game):
             return "You lost! Computers took over the world."
 
     def play_game(self):
-        user_option = self.get_user_option()
-        random_option = self.get_random_option()
+        user_option = ScissorsPaperRockGame.get_user_option()
+        random_option = ScissorsPaperRockGame.get_random_option()
 
         print(f"You chose {user_option}. Computer chose {random_option}.")
 
-        winner = self.get_winner(user_option, random_option)
+        winner = ScissorsPaperRockGame.get_winner(user_option, random_option)
         print(winner)
 
 
 class HangManGame(Game):
-    def __init__(self):
-        super().__init__()
-        self.NUMBER_OF_ATTEMPTS = 6
-        self.WORD_LIST = ['apple', 'computer', 'dog', 'banana', 'egg', 'independent', 'developer', 'wedding']
-        self.WORD = random.choice(self.WORD_LIST)
-        self.API_URL = f"https://api.dictionaryapi.dev/api/v2/entries/en/{self.WORD}"
-        self.HINTS_USED = 0
+    NUMBER_OF_ATTEMPTS = 6
+    hints_used = 0
+    word_list = ['apple', 'computer', 'dog', 'banana', 'egg', 'independent', 'developer', 'wedding']
+    word = random.choice(word_list)
+    API_URL = f"https://api.dictionaryapi.dev/api/v2/entries/en/{word}"
 
     def get_hint_from_api(self):
         """
         Request for api
         By this function we get definition(hints) for our word
         """
-        response = requests.get(self.API_URL)
+        response = requests.get(HangManGame.API_URL)
         if response.status_code == 200:
             data = response.json()
         entry = data[0] if data else None
@@ -169,7 +165,7 @@ class HangManGame(Game):
         """
         spelled_word = []
         hidden_spelled_word = []
-        for letter in self.WORD:
+        for letter in HangManGame.word:
             spelled_word.append(letter)
             hidden_spelled_word.append('_')
         print("".join(hidden_spelled_word))
@@ -181,10 +177,10 @@ class HangManGame(Game):
         """
         while True:
             users_letter = input('Enter any letter: ').lower()
-            if users_letter == 'hint' and self.HINTS_USED == 0:
-                self.HINTS_USED = 1
+            if users_letter == 'hint' and HangManGame.hints_used == 0:
+                HangManGame.hints_used = 1
                 print(self.get_hint_from_api())
-            if users_letter == 'hint' and self.HINTS_USED == 1:
+            elif users_letter == 'hint' and HangManGame.hints_used == 1:
                 print('You have used hint already')
             elif len(users_letter) == 1 and users_letter.isalpha():
                 return users_letter
@@ -206,21 +202,21 @@ class HangManGame(Game):
                 break
             else:
                 print("Don't use numbers. Only one word! ")
-        if last_chans == self.WORD:
+        if last_chans == HangManGame.word:
             return 'You are winner!'
         else:
-            return f"You lost. Right word: {self.WORD}"
+            return f"You lost. Right word: {HangManGame.word}"
 
     def play_game(self):
         """
         In this function there are all rules of game
         """
-        spelled_word, hidden_spelled_word = self.get_word_of_game()
+        spelled_word, hidden_spelled_word = HangManGame.get_word_of_game()
 
-        for attempt in range(self.NUMBER_OF_ATTEMPTS):
+        for attempt in range(HangManGame.NUMBER_OF_ATTEMPTS):
             if '_' not in hidden_spelled_word:
-                return f"You are winner. It really was word: {self.WORD}"
-            users_letter = self.get_users_letter()
+                return f"You are winner. It really was word: {HangManGame.word}"
+            users_letter = HangManGame.get_users_letter()
             for index, letter in enumerate(spelled_word):
                 if letter == users_letter:
                     hidden_spelled_word[index] = spelled_word[index]
@@ -229,7 +225,7 @@ class HangManGame(Game):
             print("".join(hidden_spelled_word))
 
         if '_' in hidden_spelled_word:
-            return self.get_result()
+            return HangManGame.get_result()
 
 
 if __name__ == "__main__":
