@@ -219,7 +219,9 @@ class HangManGame(Game):
         """
         while True:
             if self.hints_used == 0:
-                print("You have used all your attempts. Last chance, enter the correct word. You can also get a hint by simply writing: 'hint'. ")
+                print(
+                    "You have used all your attempts. Last chance, enter the correct word. You can also get a hint by simply writing: 'hint'. "
+                )
             else:
                 print("You have used all your attempts. Last chance, enter the correct word.")
             last_chans = input().lower()
