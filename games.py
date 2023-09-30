@@ -4,7 +4,7 @@ import requests
 
 
 class Game:
-    OPTIONS = ["scissors", "paper", "rock"]
+    OPTIONS = []
     API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en/{}"
 
     def __init__(self):
@@ -27,11 +27,11 @@ class Game:
             else:
                 print(f"Failed to get data for word: {word}")
 
-    def check_hints_used(self, users_input):
-        if users_input == "hint" and self.hints_used == 0:
+    def check_hints_used(self):
+        if self.hints_used == 0:
             self.hints_used = 1
             return self.get_hint()
-        elif users_input == "hint" and self.hints_used == 1:
+        elif self.hints_used == 1:
             return "You have used hint already! "
 
 
@@ -62,7 +62,7 @@ class NumberGuessingGame(Game):
         while True:
             users_input = input(f"Guess a number between {self.MINIMUM_RANGE} and {self.MAXIMUM_RANGE} (inclusive): ")
             if users_input == "hint":
-                print(self.check_hints_used(users_input))
+                print(self.check_hints_used())
             else:
                 try:
                     users_number = int(users_input)
@@ -91,7 +91,6 @@ class NumberGuessingGame(Game):
 
 class ScissorsPaperRockGame(Game):
     OPTIONS = ["scissors", "paper", "rock"]
-    API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en/{}"
 
     def get_user_option(self):
         """
@@ -204,10 +203,9 @@ class HangManGame(Game):
         while True:
             users_input = input("Enter any letter: ").lower()
             if users_input == "hint":
-                print(self.check_hints_used(users_input))
+                print(self.check_hints_used())
             elif len(users_input) == 1 and users_input.isalpha():
-                users_letter = users_input
-                return users_letter
+                return users_input
             else:
                 print("You're an idiot! I told you to write one letter. ")
 
@@ -224,16 +222,16 @@ class HangManGame(Game):
                 )
             else:
                 print("You have used all your attempts. Last chance, enter the correct word.")
-            last_chans = input().lower()
-            if last_chans == "hint":
+            last_chance = input().lower()
+            if last_chance == "hint":
                 self.hints_used = 1
                 print(self.get_hint())
-            elif last_chans.isalpha():
+            elif last_chance.isalpha():
                 break
             else:
                 print("Don't use numbers. Only one word! ")
 
-        if last_chans == self.word:
+        if last_chance == self.word:
             return "You are winner!"
         else:
             return f"You lost. Right word: {self.word}"
@@ -250,8 +248,6 @@ class HangManGame(Game):
             for index, letter in enumerate(spelled_word):
                 if letter == users_letter:
                     hidden_spelled_word[index] = spelled_word[index]
-                else:
-                    continue
             print("".join(hidden_spelled_word))
 
         if "_" in hidden_spelled_word:
